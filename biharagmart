@@ -1,0 +1,976 @@
+index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amazon Style Store</title>
+  <style>
+    :root{
+      --amazon-blue:#131921;
+      --amazon-blue-2:#232f3e;
+      --amazon-orange:#febd69;
+      --amazon-orange-2:#f3a847;
+      --amazon-yellow:#ffd814;
+      --text:#0f1111;
+      --muted:#565959;
+      --light:#f3f3f3;
+      --card:#ffffff;
+      --green:#007600;
+      --border:#d5d9d9;
+      --shadow:0 2px 5px rgba(15,17,17,.15);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:#eaeded;
+      color:var(--text);
+    }
+
+    a{
+      text-decoration:none;
+      color:inherit;
+    }
+
+    img{
+      max-width:100%;
+      display:block;
+    }
+
+    .container{
+      width: min(1400px, 96%);
+      margin:0 auto;
+    }
+
+    .topbar{
+      background:var(--amazon-blue);
+      color:white;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:10px 20px;
+      position:sticky;
+      top:0;
+      z-index:100;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      min-width:120px;
+    }
+
+    .brand-logo{
+      font-size:24px;
+      font-weight:700;
+      letter-spacing:-1px;
+    }
+
+    .brand-logo span{
+      color:var(--amazon-orange);
+    }
+
+    .location{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      color:#d6d6d6;
+      font-size:12px;
+      min-width:110px;
+    }
+
+    .location strong{
+      display:block;
+      font-size:14px;
+      color:white;
+      margin-top:2px;
+    }
+
+    .search-wrap{
+      flex:1;
+      display:flex;
+      align-items:center;
+      background:white;
+      border-radius:8px;
+      overflow:hidden;
+      min-width:260px;
+    }
+
+    .search-category{
+      background:#e6e6e6;
+      color:#444;
+      padding:12px 14px;
+      font-size:14px;
+      border:none;
+      border-right:1px solid #ccc;
+      min-width:110px;
+      cursor:pointer;
+    }
+
+    .search-wrap input{
+      flex:1;
+      border:none;
+      padding:14px 16px;
+      font-size:16px;
+      outline:none;
+    }
+
+    .search-btn{
+      background:var(--amazon-orange);
+      border:none;
+      font-size:22px;
+      padding:12px 18px;
+      cursor:pointer;
+    }
+
+    .nav-actions{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      font-size:12px;
+      color:#f1f1f1;
+      white-space:nowrap;
+    }
+
+    .nav-item{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      line-height:1.2;
+      cursor:pointer;
+    }
+
+    .nav-item strong{
+      font-size:14px;
+      color:white;
+    }
+
+    .cart{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      font-weight:700;
+      font-size:14px;
+    }
+
+    .cart-count{
+      background:var(--amazon-orange);
+      color:var(--text);
+      border-radius:50%;
+      width:24px;
+      height:24px;
+      display:grid;
+      place-items:center;
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .category-bar{
+      background:var(--amazon-blue-2);
+      color:white;
+      padding:8px 20px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:20px;
+      font-size:14px;
+    }
+
+    .category-bar a{
+      opacity:.9;
+    }
+
+    .hero{
+      background:linear-gradient(90deg, rgba(8,10,20,.75), rgba(7,10,18,.25)),
+                 url('https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+      min-height:420px;
+      display:flex;
+      align-items:flex-end;
+      padding:40px 0 20px;
+    }
+
+    .hero-box{
+      max-width:650px;
+      background:rgba(255,255,255,.08);
+      color:white;
+      border:1px solid rgba(255,255,255,.2);
+      backdrop-filter: blur(2px);
+      padding:24px 28px;
+      border-radius:12px;
+      margin-left:40px;
+    }
+
+    .hero-box .tag{
+      display:inline-block;
+      background:var(--amazon-yellow);
+      color:#111;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.5px;
+      text-transform:uppercase;
+      margin-bottom:12px;
+    }
+
+    .hero-box h1{
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      line-height:1.1;
+      margin:0 0 12px;
+    }
+
+    .hero-box p{
+      margin:0 0 20px;
+      font-size:1rem;
+      color:#f0f0f0;
+    }
+
+    .cta{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background:var(--amazon-yellow);
+      color:#111;
+      border:none;
+      padding:12px 18px;
+      border-radius:999px;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:var(--shadow);
+    }
+
+    .main{
+      padding:20px 0 40px;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:18px;
+      margin-top:18px;
+    }
+
+    .panel{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+
+    .panel h2{
+      margin:0 0 16px;
+      font-size:22px;
+    }
+
+    .mini-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .mini-item{
+      background:#f7f7f7;
+      border-radius:8px;
+      overflow:hidden;
+      border:1px solid #ebebeb;
+    }
+
+    .mini-item img{
+      width:100%;
+      height:120px;
+      object-fit:cover;
+    }
+
+    .mini-item p{
+      padding:8px 10px;
+      font-size:13px;
+      margin:0;
+      color:#2b2b2b;
+    }
+
+    .link{
+      display:inline-block;
+      margin-top:12px;
+      color:#007185;
+      font-size:14px;
+    }
+
+    .products{
+      display:grid;
+      grid-template-columns:repeat(5, 1fr);
+      gap:18px;
+      margin-top:18px;
+    }
+
+    .product-card{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:12px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      transition:transform .2s ease, box-shadow .2s ease;
+    }
+
+    .product-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 6px 16px rgba(0,0,0,.12);
+    }
+
+    .product-img{
+      height:220px;
+      background:#f2f2f2;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+
+    .product-img img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .product-body{
+      padding:14px;
+    }
+
+    .badge{
+      display:inline-block;
+      background:#f6f8f8;
+      color:#0f1111;
+      border:1px solid #dfe1e1;
+      border-radius:999px;
+      font-size:11px;
+      padding:4px 8px;
+      margin-bottom:8px;
+      font-weight:700;
+    }
+
+    .rating{
+      color:#f78f24;
+      font-size:14px;
+      margin-bottom:8px;
+    }
+
+    .product-name{
+      font-size:15px;
+      line-height:1.4;
+      min-height:42px;
+      margin:0 0 8px;
+    }
+
+    .price{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+
+    .price strong{
+      font-size:26px;
+      color:var(--text);
+      letter-spacing:-1px;
+    }
+
+    .price small{
+      font-size:15px;
+      vertical-align:top;
+    }
+
+    .prime{
+      font-size:12px;
+      color:#0f9d58;
+      font-weight:700;
+      margin-bottom:10px;
+    }
+
+    .delivery{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:14px;
+    }
+
+    .cart-btn{
+      background:var(--amazon-yellow);
+      border:1px solid #f3b21d;
+      border-radius:999px;
+      width:100%;
+      padding:10px 12px;
+      font-size:14px;
+      font-weight:700;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .cart-btn:hover{
+      background:#f7ca54;
+    }
+
+    .deals-banner{
+      margin-top:26px;
+      background:linear-gradient(90deg, #d5e9f7, #f6f4ef);
+      border:1px solid #d5d9d9;
+      border-radius:12px;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:20px 24px;
+    }
+
+    .deals-banner h3{
+      margin:0 0 4px;
+      font-size:28px;
+    }
+
+    .deals-banner p{
+      margin:0;
+      color:var(--muted);
+    }
+
+    .deal-btn{
+      background:var(--amazon-blue-2);
+      color:white;
+      border:none;
+      border-radius:999px;
+      padding:12px 18px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .newsletter{
+      margin-top:26px;
+      background:linear-gradient(135deg, #fff, #f5f7f7);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:26px;
+      text-align:center;
+    }
+
+    .newsletter h3{
+      margin:0 0 8px;
+      font-size:28px;
+    }
+
+    .newsletter p{
+      margin:0 0 16px;
+      color:var(--muted);
+    }
+
+    .newsletter form{
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .newsletter input{
+      width:min(480px, 90vw);
+      padding:14px 16px;
+      border:1px solid #c7d0d0;
+      border-radius:8px;
+      font-size:16px;
+    }
+
+    .newsletter button{
+      background:var(--amazon-orange);
+      border:none;
+      border-radius:8px;
+      padding:14px 22px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    footer{
+      background:var(--amazon-blue-2);
+      color:#fff;
+      margin-top:30px;
+      padding:28px 0 40px;
+    }
+
+    .footer-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:22px;
+    }
+
+    .footer-col h4{
+      margin:0 0 12px;
+      font-size:16px;
+    }
+
+    .footer-col a{
+      display:block;
+      color:#d7e0e8;
+      margin:7px 0;
+      font-size:14px;
+    }
+
+    .footer-bottom{
+      border-top:1px solid rgba(255,255,255,.1);
+      margin-top:20px;
+      padding-top:20px;
+      text-align:center;
+      color:#d5d5d5;
+      font-size:14px;
+    }
+
+    @media (max-width: 1100px){
+      .products{
+        grid-template-columns:repeat(3,1fr);
+      }
+      .row{
+        grid-template-columns:repeat(2,1fr);
+      }
+    }
+
+    @media (max-width: 860px){
+      .topbar{
+        flex-wrap:wrap;
+        justify-content:center;
+      }
+      .nav-actions{
+        width:100%;
+        justify-content:center;
+      }
+      .hero-box{
+        margin:0 20px 20px;
+      }
+      .products{
+        grid-template-columns:repeat(2,1fr);
+      }
+      .footer-grid{
+        grid-template-columns:repeat(2,1fr);
+      }
+    }
+
+    @media (max-width: 560px){
+      .products, .row, .footer-grid{
+        grid-template-columns:1fr;
+      }
+
+      .search-wrap{
+        width:100%;
+      }
+      .category-bar{
+        justify-content:center;
+      }
+      .hero{
+        min-height:340px;
+      }
+      .hero-box{
+        padding:18px;
+      }
+      .deals-banner{
+        flex-direction:column;
+        text-align:center;
+        gap:16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-logo">A<span>mazon</span></div>
+    </div>
+
+    <div class="location">
+      <div>📍</div>
+      <div>
+        Deliver to
+        <strong>India</strong>
+      </div>
+    </div>
+
+    <div class="search-wrap">
+      <button class="search-category" type="button">All ▾</button>
+      <input id="searchInput" type="text" placeholder="Search Amazon.in" />
+      <button class="search-btn" type="button">⌕</button>
+    </div>
+
+    <div class="nav-actions">
+      <div class="nav-item">
+        <span>Hello, sign in</span>
+        <strong>Account & Lists</strong>
+      </div>
+      <div class="nav-item">
+        <span>Returns</span>
+        <strong>& Orders</strong>
+      </div>
+      <div class="cart">
+        🛒
+        <span>Cart</span>
+        <span class="cart-count" id="cartCount">0</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="category-bar">
+    <a href="#">All</a>
+    <a href="#">Best Sellers</a>
+    <a href="#">Mobiles</a>
+    <a href="#">Fashion</a>
+    <a href="#">Electronics</a>
+    <a href="#">Home</a>
+    <a href="#">Beauty</a>
+    <a href="#">Prime</a>
+    <a href="#">Books</a>
+    <a href="#">New Releases</a>
+    <a href="#">Customer Service</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-box">
+      <div class="tag">New Season</div>
+      <h1>Big savings on top brands</h1>
+      <p>Discover premium electronics, home essentials, fashion, and everyday deals curated for your lifestyle.</p>
+      <button class="cta">Shop now</button>
+    </div>
+  </section>
+
+  <main class="main container">
+    <section class="row">
+      <div class="panel">
+        <h2>Electronics</h2>
+        <div class="mini-grid">
+          <div class="mini-item">
+            <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=500&q=80" alt="Laptop">
+            <p>Laptops</p>
+          </div>
+          <div class="mini-item">
+            <img src="https://images.unsplash.com/photo-1518444065439-e933c06ce9cd?auto=format&fit=crop&w=500&q=80" alt="Audio">
+            <p>Audio</p>
+          </div>
+          <div class="mini-item">
+            <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=500&q=80" alt="Phones">
+            <p>Smartphones</p>
+          </div>
+          <div class="mini-item">
+            <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=500&q=80" alt="Accessories">
+            <p>Accessories</p>
+          </div>
+        </div>
+        <a href="#" class="link">Shop more</a>
+      </div>
+
+      <div class="panel">
+        <h2>Fashion</h2>
+        <div class="mini-grid">
+          <div class="mini-item">
+            <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=500&q=80" alt="Fashion 1">
+            <p>Women</p>
+          </div>
+          <div class="mini-item">
+            <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=500&q=80" alt="Fashion 2">
+            <p>Men</p>
+          </div>
+          <div class="mini-item">
+            <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=500&q=80" alt="Fashion 3">
+            <p>Kids</p>
+          </div>
+          <div class="mini-item">
+            <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=500&q=80" alt="Fashion 4">
+            <p>Footwear</p>
+          </div>
+        </div>
+        <a href="#" class="link">See more</a>
+      </div>
+
+      <div class="panel">
+        <h2>Home & Kitchen</h2>
+        <div class="mini-grid">
+          <div class="mini-item">
+            <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=500&q=80" alt="Furniture">
+            <p>Furniture</p>
+          </div>
+          <div class="mini-item">
+            <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=500&q=80" alt="Decor">
+            <p>Decor</p>
+          </div>
+          <div class="mini-item">
+            <img src="https://images.unsplash.com/photo-1585518419759-7fe2e0fbf8a6?auto=format&fit=crop&w=500&q=80" alt="Appliances">
+            <p>Appliances</p>
+          </div>
+          <div class="mini-item">
+            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=500&q=80" alt="Kitchen">
+            <p>Kitchen</p>
+          </div>
+        </div>
+        <a href="#" class="link">Explore collection</a>
+      </div>
+
+      <div class="panel">
+        <h2>Top deals</h2>
+        <div class="mini-grid">
+          <div class="mini-item">
+            <img src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=500&q=80" alt="Deal 1">
+            <p>Up to 50% off</p>
+          </div>
+          <div class="mini-item">
+            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=80" alt="Deal 2">
+            <p>Smartwatches</p>
+          </div>
+          <div class="mini-item">
+            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=500&q=80" alt="Deal 3">
+            <p>Sneakers</p>
+          </div>
+          <div class="mini-item">
+            <img src="https://images.unsplash.com/photo-1526045478516-99145907023c?auto=format&fit=crop&w=500&q=80" alt="Deal 4">
+            <p>Travel gear</p>
+          </div>
+        </div>
+        <a href="#" class="link">Browse all deals</a>
+      </div>
+    </section>
+
+    <div class="deals-banner">
+      <div>
+        <h3>Deals of the Day</h3>
+        <p>Save on trending tech, home essentials, and wellness products.</p>
+      </div>
+      <button class="deal-btn">See all offers</button>
+    </div>
+
+    <section class="products" id="productGrid"></section>
+
+    <section class="newsletter">
+      <h3>Get daily deals in your inbox</h3>
+      <p>Sign up for exclusive offers, product drops, and early access.</p>
+      <form>
+        <input type="email" placeholder="Enter your email address" />
+        <button type="submit">Subscribe</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>Get to Know Us</h4>
+          <a href="#">About Us</a>
+          <a href="#">Careers</a>
+          <a href="#">Press Releases</a>
+          <a href="#">Amazon Science</a>
+        </div>
+        <div class="footer-col">
+          <h4>Make Money with Us</h4>
+          <a href="#">Sell on Amazon</a>
+          <a href="#">Become an Affiliate</a>
+          <a href="#">Advertise Your Products</a>
+          <a href="#">Fulfilment by Amazon</a>
+        </div>
+        <div class="footer-col">
+          <h4>Amazon Payment Products</h4>
+          <a href="#">Amazon Pay</a>
+          <a href="#">Gift Cards</a>
+          <a href="#">Amazon Mobile</a>
+          <a href="#">Business Card</a>
+        </div>
+        <div class="footer-col">
+          <h4>Let Us Help You</h4>
+          <a href="#">Your Account</a>
+          <a href="#">Returns Centre</a>
+          <a href="#">Help</a>
+          <a href="#">Shipping Rates</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        © 2026 Amazon-like demo store. Built for front-end demo purposes.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const products = [
+      {
+        name: "Apple iPhone 15 Pro",
+        category: "Electronics",
+        rating: 4.8,
+        reviews: 3821,
+        price: 109999,
+        image: "https://images.unsplash.com/photo-1695048133142-1a8d8f6d26d6?auto=format&fit=crop&w=800&q=80",
+        badge: "Best Seller",
+        prime: true,
+        delivery: "Free delivery by Tomorrow"
+      },
+      {
+        name: "Noise Smartwatch Pro",
+        category: "Wearables",
+        rating: 4.6,
+        reviews: 1144,
+        price: 4999,
+        image: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=800&q=80",
+        badge: "Trending",
+        prime: true,
+        delivery: "Free delivery"
+      },
+      {
+        name: "Sony WH-1000XM5",
+        category: "Electronics",
+        rating: 4.7,
+        reviews: 912,
+        price: 28999,
+        image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=800&q=80",
+        badge: "New Arrival",
+        prime: true,
+        delivery: "In stock"
+      },
+      {
+        name: "Dell XPS 13 Laptop",
+        category: "Computers",
+        rating: 4.9,
+        reviews: 685,
+        price: 89990,
+        image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=800&q=80",
+        badge: "Top Rated",
+        prime: false,
+        delivery: "Ships in 24 hours"
+      },
+      {
+        name: "Canon EOS R50",
+        category: "Cameras",
+        rating: 4.7,
+        reviews: 443,
+        price: 62990,
+        image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=800&q=80",
+        badge: "Featured",
+        prime: true,
+        delivery: "Free delivery"
+      },
+      {
+        name: "Samsung 4K Smart TV",
+        category: "Electronics",
+        rating: 4.5,
+        reviews: 2004,
+        price: 45999,
+        image: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=800&q=80",
+        badge: "Hot Deal",
+        prime: true,
+        delivery: "Free delivery"
+      },
+      {
+        name: "Nike Air Max Sneakers",
+        category: "Fashion",
+        rating: 4.4,
+        reviews: 2016,
+        price: 7499,
+        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80",
+        badge: "Limited",
+        prime: false,
+        delivery: "Free delivery over ₹499"
+      },
+      {
+        name: "Philips Air Fryer",
+        category: "Home",
+        rating: 4.6,
+        reviews: 1478,
+        price: 5999,
+        image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80",
+        badge: "Best Value",
+        prime: true,
+        delivery: "In stock"
+      },
+      {
+        name: "Dyson Air Purifier",
+        category: "Home",
+        rating: 4.8,
+        reviews: 734,
+        price: 34999,
+        image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80",
+        badge: "Premium",
+        prime: true,
+        delivery: "Free delivery"
+      },
+      {
+        name: "Cotton Bedding Set",
+        category: "Home",
+        rating: 4.5,
+        reviews: 1033,
+        price: 3499,
+        image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80",
+        badge: "Customer Favorite",
+        prime: false,
+        delivery: "Free returns"
+      }
+    ];
+
+    const productGrid = document.getElementById("productGrid");
+    const cartCount = document.getElementById("cartCount");
+    const searchInput = document.getElementById("searchInput");
+
+    let cartItems = 0;
+
+    function formatPrice(value) {
+      return new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+        maximumFractionDigits: 0
+      }).format(value);
+    }
+
+    function renderProducts(list) {
+      productGrid.innerHTML = list.map(product => `
+        <article class="product-card">
+          <div class="product-img">
+            <img src="${product.image}" alt="${product.name}" loading="lazy">
+          </div>
+          <div class="product-body">
+            <span class="badge">${product.badge}</span>
+            <div class="rating">★★★★★ <span style="color:#565959;">(${product.reviews})</span></div>
+            <h3 class="product-name">${product.name}</h3>
+            <div class="price">
+              <span>₹</span><strong>${Math.floor(product.price / 1000)}</strong><small>${(product.price % 1000).toString().padStart(3, '0')}</small>
+            </div>
+            <div class="prime">${product.prime ? "Prime" : ""}</div>
+            <div class="delivery">${product.delivery}</div>
+            <button class="cart-btn" data-name="${product.name}">Add to Cart</button>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    renderProducts(products);
+
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest(".cart-btn");
+      if (!btn) return;
+
+      cartItems += 1;
+      cartCount.textContent = cartItems;
+
+      btn.textContent = "Added";
+      btn.style.background = "#d8f0d8";
+      btn.style.borderColor = "#89cc8a";
+
+      setTimeout(() => {
+        btn.textContent = "Add to Cart";
+        btn.style.background = "var(--amazon-yellow)";
+        btn.style.borderColor = "#f3b21d";
+      }, 1000);
+    });
+
+    searchInput.addEventListener("input", (e) => {
+      const query = e.target.value.trim().toLowerCase();
+      const filtered = products.filter(product =>
+        product.name.toLowerCase().includes(query) ||
+        product.category.toLowerCase().includes(query)
+      );
+      renderProducts(filtered);
+    });
+
+    document.querySelector(".newsletter form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      alert("Thanks for subscribing! You will receive deals soon.");
+    });
+  </script>
+</body>
+</html>
